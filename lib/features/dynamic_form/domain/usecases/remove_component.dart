@@ -1,5 +1,5 @@
-// lib/features/dynamic_form/domain/usecases/remove_component.dart
 import 'package:marble/core/usecases/usecase.dart';
+import 'package:marble/features/dynamic_form/domain/entities/component.dart';
 import 'package:marble/features/dynamic_form/domain/repositiry/form_repositiry.dart';
 
 class RemoveComponent implements UseCase<void, Params> {
@@ -16,5 +16,5 @@ class RemoveComponent implements UseCase<void, Params> {
 class Params {
   final int index;
 
-  Params(this.index);
+  Params(this.index, Component component);
 }

@@ -1,4 +1,3 @@
-// lib/features/dynamic_form/presentation/bloc/form_bloc.dart
 import 'package:bloc/bloc.dart';
 import 'package:marble/features/dynamic_form/domain/usecases/add-component.dart';
 import '../../domain/usecases/get_components.dart';
@@ -22,12 +21,11 @@ class FormBloc extends Bloc<FormEvent, FormState> {
     });
 
     on<RemoveComponentEvent>((event, emit) async {
-      removeComponent(Params(event.index));
+      removeComponent(Params(event.index, event.component));
       emit(state.copyWith(components: await getComponents(NoParams())));
     });
 
     on<SubmitFormEvent>((event, emit) async {
-      // Handle form submission logic here
       print("Form submitted with components: ${state.components}");
     });
   }

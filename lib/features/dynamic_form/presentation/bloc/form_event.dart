@@ -12,11 +12,12 @@ class AddComponentEvent extends FormEvent {
 
 class RemoveComponentEvent extends FormEvent {
   final int index;
+  final Component component;
 
-  RemoveComponentEvent(this.index);
+  RemoveComponentEvent(this.index, this.component);
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [index, component];
 }
 
 class SubmitFormEvent extends FormEvent {
