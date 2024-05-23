@@ -7,16 +7,20 @@ import '../bloc/form_event.dart';
 class ComponentItem extends StatefulWidget {
   final int index;
   final Component component;
+  final GlobalKey<FormState> formKey;
 
-  const ComponentItem({Key? key, required this.index, required this.component})
-      : super(key: key);
+  const ComponentItem({
+    Key? key,
+    required this.index,
+    required this.component,
+    required this.formKey,
+  }) : super(key: key);
 
   @override
   _ComponentItemState createState() => _ComponentItemState();
 }
 
 class _ComponentItemState extends State<ComponentItem> {
-  final _formKey = GlobalKey<FormState>();
   final _textFieldController1 = TextEditingController();
   final _textFieldController2 = TextEditingController();
   int _radioValue = 0;
@@ -29,7 +33,7 @@ class _ComponentItemState extends State<ComponentItem> {
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Form(
-          key: _formKey,
+          key: widget.formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,7 +65,11 @@ class _ComponentItemState extends State<ComponentItem> {
                                   MaterialStatePropertyAll(Colors.blue),
                               backgroundColor:
                                   MaterialStatePropertyAll(Colors.white)),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (validateForm()) {
+                              // Perform the "Done" action
+                            }
+                          },
                           child: const Text('Done'))
                     ],
                   )
@@ -120,11 +128,15 @@ class _ComponentItemState extends State<ComponentItem> {
   }
 
   bool validateForm() {
-    final form = _formKey.currentState;
+    final form = widget.formKey.currentState;
     if (form!.validate()) {
       return true;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill out all fields')),
+      );
+      return false;
     }
-    return false;
   }
 }
 
@@ -147,6 +159,10 @@ class LabelTextField extends StatelessWidget {
       },
       controller: _textFieldController1,
       decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
           enabledBorder: OutlineInputBorder(
@@ -175,6 +191,10 @@ class InfoTextField extends StatelessWidget {
       },
       controller: _textFieldController2,
       decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
           enabledBorder: OutlineInputBorder(
