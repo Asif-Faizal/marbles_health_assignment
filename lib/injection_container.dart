@@ -10,15 +10,12 @@ import 'features/dynamic_form/presentation/bloc/form_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Repository
   sl.registerLazySingleton<FormRepository>(() => FormRepositoryImpl());
 
-  // Use cases
   sl.registerLazySingleton(() => GetComponents(sl()));
   sl.registerLazySingleton(() => AddComponent(sl()));
   sl.registerLazySingleton(() => RemoveComponent(sl()));
 
-  // Bloc
   sl.registerFactory(() => FormBloc(
         getComponents: sl(),
         addComponent: sl(),

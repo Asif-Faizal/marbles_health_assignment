@@ -5,7 +5,11 @@ class FormState extends Equatable {
   final List<Component> components;
 
   FormState({List<Component>? components})
-      : components = components ?? [Component(0)];
+      : components = components ??
+            [
+              const Component(
+                  id: 0, label: '', infoText: '', settings: 'Required')
+            ];
 
   FormState copyWith({List<Component>? components}) {
     return FormState(components: components ?? this.components);

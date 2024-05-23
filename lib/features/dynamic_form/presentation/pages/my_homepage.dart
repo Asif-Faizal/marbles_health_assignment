@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (!formKey.currentState!.validate()) {
                   allValid = false;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please fill out all fields')),
+                    const SnackBar(content: Text('Please fill out all fields')),
                   );
                   break;
                 }
@@ -49,20 +49,36 @@ class _MyHomePageState extends State<MyHomePage> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('Submitted Form'),
+                  title: const Text('Form Submitted'),
                   content: SingleChildScrollView(
                     child: ListBody(
                       children: state.components.map((component) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(component.toString()),
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Component ID: ${component.id + 1}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 5),
+                              Text('Label: ${component.label}'),
+                              const SizedBox(height: 5),
+                              Text('Info-text: ${component.infoText}'),
+                              const SizedBox(height: 5),
+                              Text('Settings: ${component.settings}'),
+                              const Divider(),
+                            ],
+                          ),
                         );
                       }).toList(),
                     ),
                   ),
                   actions: [
                     TextButton(
-                      child: Text('Close'),
+                      child: const Text('OK'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -109,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         context.read<FormBloc>().add(AddComponentEvent());
                       },
-                      child: Text('ADD'),
+                      child: const Text('ADD'),
                     ),
                   ),
                 ),

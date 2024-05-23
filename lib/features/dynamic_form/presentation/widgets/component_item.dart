@@ -21,9 +21,51 @@ class ComponentItem extends StatefulWidget {
 }
 
 class _ComponentItemState extends State<ComponentItem> {
-  final _textFieldController1 = TextEditingController();
-  final _textFieldController2 = TextEditingController();
+  late TextEditingController _labelController;
+  late TextEditingController _infoTextController;
   int _radioValue = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _labelController = TextEditingController(text: widget.component.label);
+    _infoTextController =
+        TextEditingController(text: widget.component.infoText);
+    _radioValue = _getRadioValueFromSettings(widget.component.settings);
+  }
+
+  @override
+  void dispose() {
+    _labelController.dispose();
+    _infoTextController.dispose();
+    super.dispose();
+  }
+
+  int _getRadioValueFromSettings(String settings) {
+    switch (settings) {
+      case 'Required':
+        return 0;
+      case 'Read only':
+        return 1;
+      case 'Hidden':
+        return 2;
+      default:
+        return 0;
+    }
+  }
+
+  String _getSettingsFromRadioValue(int value) {
+    switch (value) {
+      case 0:
+        return 'Required';
+      case 1:
+        return 'Read only';
+      case 2:
+        return 'Hidden';
+      default:
+        return 'Required';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +85,7 @@ class _ComponentItemState extends State<ComponentItem> {
                   Text('Component ${widget.index + 1}',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Row(
@@ -51,45 +93,73 @@ class _ComponentItemState extends State<ComponentItem> {
                     children: [
                       if (widget.index != 0)
                         ElevatedButton(
-                            onPressed: () {
-                              context.read<FormBloc>().add(RemoveComponentEvent(
-                                  widget.index, widget.component));
-                            },
-                            child: const Text('Delete')),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      ElevatedButton(
-                          style: const ButtonStyle(
-                              foregroundColor:
-                                  MaterialStatePropertyAll(Colors.blue),
-                              backgroundColor:
-                                  MaterialStatePropertyAll(Colors.white)),
                           onPressed: () {
-                            if (validateForm()) {
-                              // Perform the "Done" action
-                            }
+                            context.read<FormBloc>().add(RemoveComponentEvent(
+                                widget.index, widget.component));
                           },
-                          child: const Text('Done'))
+                          child: const Text('Delete'),
+                        ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        style: const ButtonStyle(
+                            foregroundColor:
+                                MaterialStatePropertyAll(Colors.blue),
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.white)),
+                        onPressed: () {},
+                        child: const Text('Done'),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _labelController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Label';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  hintText: 'Enter Label',
+                ),
+                onChanged: (value) {
+                  _updateComponent();
+                },
               ),
-              LabelTextField(textFieldController1: _textFieldController1),
-              SizedBox(
-                height: 10,
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _infoTextController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Info-text';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  hintText: 'Enter Info-text',
+                ),
+                onChanged: (value) {
+                  _updateComponent();
+                },
               ),
-              InfoTextField(textFieldController2: _textFieldController2),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               const Text('Settings:'),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   ...List.generate(
@@ -104,6 +174,7 @@ class _ComponentItemState extends State<ComponentItem> {
                             onChanged: (value) {
                               setState(() {
                                 _radioValue = value as int;
+                                _updateComponent();
                               });
                             },
                           ),
@@ -127,79 +198,16 @@ class _ComponentItemState extends State<ComponentItem> {
     );
   }
 
-  bool validateForm() {
-    final form = widget.formKey.currentState;
-    if (form!.validate()) {
-      return true;
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill out all fields')),
-      );
-      return false;
-    }
-  }
-}
-
-class LabelTextField extends StatelessWidget {
-  const LabelTextField({
-    super.key,
-    required TextEditingController textFieldController1,
-  }) : _textFieldController1 = textFieldController1;
-
-  final TextEditingController _textFieldController1;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter Label';
-        }
-        return null;
-      },
-      controller: _textFieldController1,
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          hintText: 'Enter Label'),
-    );
-  }
-}
-
-class InfoTextField extends StatelessWidget {
-  const InfoTextField({
-    super.key,
-    required TextEditingController textFieldController2,
-  }) : _textFieldController2 = textFieldController2;
-
-  final TextEditingController _textFieldController2;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter Info-text';
-        }
-        return null;
-      },
-      controller: _textFieldController2,
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          hintText: 'Enter Info-text'),
-    );
+  void _updateComponent() {
+    context.read<FormBloc>().add(
+          UpdateComponentEvent(
+            index: widget.index,
+            component: widget.component.copyWith(
+              label: _labelController.text,
+              infoText: _infoTextController.text,
+              settings: _getSettingsFromRadioValue(_radioValue),
+            ),
+          ),
+        );
   }
 }

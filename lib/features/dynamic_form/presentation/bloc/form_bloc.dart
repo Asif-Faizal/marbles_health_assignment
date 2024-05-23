@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:marble/features/dynamic_form/domain/entities/component.dart';
 import 'package:marble/features/dynamic_form/domain/usecases/add-component.dart';
 import '../../domain/usecases/get_components.dart';
 import '../../domain/usecases/remove_component.dart';
@@ -27,6 +28,12 @@ class FormBloc extends Bloc<FormEvent, FormState> {
 
     on<SubmitFormEvent>((event, emit) async {
       emit(FormSubmittedState(components: state.components));
+    });
+
+    on<UpdateComponentEvent>((event, emit) {
+      List<Component> updatedComponents = List.from(state.components);
+      updatedComponents[event.index] = event.component;
+      emit(state.copyWith(components: updatedComponents));
     });
   }
 }
