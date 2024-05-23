@@ -26,7 +26,7 @@ class FormBloc extends Bloc<FormEvent, FormState> {
     });
 
     on<SubmitFormEvent>((event, emit) async {
-      print("Form submitted with components: ${state.components}");
+      emit(FormSubmittedState(components: state.components));
     });
   }
 }

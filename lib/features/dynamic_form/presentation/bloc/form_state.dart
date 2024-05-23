@@ -14,3 +14,11 @@ class FormState extends Equatable {
   @override
   List<Object> get props => [components];
 }
+
+class FormSubmittedState extends FormState {
+  final List<Component> components;
+  FormSubmittedState({required this.components});
+
+  @override
+  List<Object> get props => [components];
+}
