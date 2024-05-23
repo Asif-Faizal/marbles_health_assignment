@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Component ID: ${component.id + 1}',
+                                'Component ${component.id + 1}:',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
