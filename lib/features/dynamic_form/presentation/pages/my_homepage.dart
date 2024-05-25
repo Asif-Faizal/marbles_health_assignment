@@ -20,17 +20,35 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text('Dynamic Form'),
+        title: const Text('Marbles Health'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
+          TextButton(
+            child: const Row(
+              children: [
+                Text(
+                  'Save',
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Icon(
+                  Icons.save,
+                  color: Colors.white,
+                ),
+              ],
+            ),
             onPressed: () {
               bool allValid = true;
               for (var formKey in _formKeys) {
                 if (!formKey.currentState!.validate()) {
                   allValid = false;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please fill out all fields')),
+                    const SnackBar(
+                      content: Text('Please fill out all fields'),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.red,
+                    ),
                   );
                   break;
                 }
@@ -80,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     TextButton(
                       child: const Text('OK'),
                       onPressed: () {
+                        context.read<FormBloc>().add(ResetFormEvent());
                         Navigator.of(context).pop();
                       },
                     ),

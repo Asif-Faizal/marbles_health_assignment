@@ -103,10 +103,18 @@ class _ComponentItemState extends State<ComponentItem> {
                       ElevatedButton(
                         style: const ButtonStyle(
                             foregroundColor:
-                                MaterialStatePropertyAll(Colors.blue),
+                                MaterialStatePropertyAll(Colors.deepPurple),
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.white)),
-                        onPressed: () {},
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Saved'),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        },
                         child: const Text('Done'),
                       ),
                     ],
@@ -123,6 +131,12 @@ class _ComponentItemState extends State<ComponentItem> {
                   return null;
                 },
                 decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
@@ -145,6 +159,12 @@ class _ComponentItemState extends State<ComponentItem> {
                   return null;
                 },
                 decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),

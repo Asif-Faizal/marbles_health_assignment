@@ -22,6 +22,8 @@ class RemoveComponentEvent extends FormEvent {
 
 class SubmitFormEvent extends FormEvent {}
 
+class ResetFormEvent extends FormEvent {}
+
 class UpdateComponentEvent extends FormEvent {
   final int index;
   final Component component;

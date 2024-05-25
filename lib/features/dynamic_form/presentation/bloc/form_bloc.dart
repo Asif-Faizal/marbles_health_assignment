@@ -35,5 +35,8 @@ class FormBloc extends Bloc<FormEvent, FormState> {
       updatedComponents[event.index] = event.component;
       emit(state.copyWith(components: updatedComponents));
     });
+    on<ResetFormEvent>((event, emit) async {
+      emit(FormState());
+    });
   }
 }
